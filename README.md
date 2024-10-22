@@ -1,4 +1,4 @@
-# Mayra Rodriguez (vuechat)
+# Vue Chat
 
 A Quasar Project
 
