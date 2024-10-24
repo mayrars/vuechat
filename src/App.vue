@@ -3,7 +3,14 @@
 </template>
 
 <script setup>
-defineOptions({
-  name: 'App'
-});
+  import { getAuth, onAuthStateChanged } from 'firebase/auth';
+  import { auth } from './firebase';
+  onAuthStateChanged(auth, (user) => {
+    if(user){
+      const uid = user.uid;
+    }else{
+
+    }
+  })
+  if(user)
 </script>
