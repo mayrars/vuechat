@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '../firebase'
+import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { auth, db } from '../firebase';
 const rightDrawerOpen = ref(false)
 
 const toggleRightDrawer = () => {
@@ -10,24 +10,17 @@ const toggleRightDrawer = () => {
 
 const accessGoogle = () => {
   const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider)
-    .then((user) => {
-      console.log(user)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+  signInWithPopup(auth, provider).catch(error=> console.log(error))
 }
-const logoutGoogle = () => {}
+const logoutGoogle = () => {
+  signOut(auth).catch(error=> console.log(error))
+}
 </script>
 <template>
   <q-header elevated class="bg-primary text-white">
     <q-toolbar>
       <q-toolbar-title>
-        <q-avatar>
-          <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
-        </q-avatar>
-        Title
+        Chat
       </q-toolbar-title>
       <q-btn label="Ingresar" color="secondary" @click="accessGoogle"></q-btn>
       <q-btn label="Salir" color="secondary" @click="logoutGoogle"></q-btn>
