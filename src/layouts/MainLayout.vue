@@ -4,9 +4,7 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-
     <Footer />
-
   </q-layout>
 </template>
 
