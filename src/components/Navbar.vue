@@ -2,7 +2,9 @@
 import { ref } from 'vue'
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { auth, db } from '../firebase';
+import { inject } from 'vue';
 const rightDrawerOpen = ref(false)
+const userGoogle = inject('userGoogle')
 
 const toggleRightDrawer = () => {
   rightDrawerOpen.value = !rightDrawerOpen.value
@@ -22,13 +24,13 @@ const logoutGoogle = () => {
       <q-toolbar-title>
         Chat
       </q-toolbar-title>
-      <q-btn label="Ingresar" color="secondary" @click="accessGoogle"></q-btn>
-      <q-btn label="Salir" color="secondary" @click="logoutGoogle"></q-btn>
-      <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
+      <q-btn label="Ingresar" color="secondary" @click="accessGoogle" v-if="!userGoogle"></q-btn>
+      <q-btn label="Salir" color="secondary" @click="logoutGoogle" v-if="userGoogle"></q-btn>
+      <q-btn dense flat round icon="menu" @click="toggleRightDrawer" v-if="userGoogle"/>
     </q-toolbar>
   </q-header>
 
-  <q-drawer v-model="rightDrawerOpen" side="right" behavior="mobile" bordered>
+  <q-drawer v-model="rightDrawerOpen" side="right" behavior="mobile" bordered v-if="userGoogle">
     <!-- drawer content -->
   </q-drawer>
 </template>
