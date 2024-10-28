@@ -11,6 +11,9 @@ const addText=()=>{
     time: Date.now(),
     displayName: auth.currentUser.displayName
   })
+  .then(()=>{
+    text.value = ''
+  })
   .catch(e=>{
     console.log(e)
   })
@@ -26,6 +29,7 @@ const addText=()=>{
           standout
           label="Ingrese texto"
           v-model='text'
+          @keyup.enter="addText"
         >
           <template #append>
             <q-icon name="send" class="cursor-pointer" @click="addText"/>
