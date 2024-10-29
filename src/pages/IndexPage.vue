@@ -9,18 +9,17 @@
 
   const chatRef = ref(null)
   const q = query(collection(db, 'chats'), orderBy('time'))
-  const unsubscribe = onSnapshot(q, (snapshot) => {
-    snapshot.docChanges().forEach(async(change) => {
+  const unsubscribe = onSnapshot(q, async(snapshot) => {
+    snapshot.docChanges().forEach((change) => {
       if (change.type === 'added') {
-        console.log('New chat: ', change.doc.data())
         messages.value.push({
           id: change.doc.id,
           ...change.doc.data()
         })
-        await nextTick()
-        window.scrollTo(0, document.body.scrollHeight)
       }
-    })
+    });
+    await nextTick()
+    chatRef.value.scrollTo(0, chatRef.value.scrollHeight)
   })
 </script>
 <template>
@@ -28,7 +27,7 @@
     <h3 class="text-center text-primary">Inicia sesiòn</h3>
   </q-page>
   <q-page v-else padding>
-    <div class="q-pa-md row justify-center" ref="chatRef">
+    <div class="q-pa-md row justify-center scrollChat" ref="chatRef">
       <div style="width: 100%; max-width: 400px">
         <template
           v-for="message in messages"
@@ -45,3 +44,9 @@
   </q-page>
 </template>
 
+<style>
+.scrollChat{
+  height: calc(100vh - 100px);
+  overflow-y: scroll;
+}
+</style>

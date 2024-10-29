@@ -20,3 +20,10 @@
   $q.loading.show({
   })
 </script>
+
+<style>
+body{
+  overflow-y: hidden;
+  box-sizing: border-box;
+}
+</style>
