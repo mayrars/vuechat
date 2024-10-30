@@ -1,8 +1,9 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { auth, db } from '../firebase';
-import { inject } from 'vue';
+import InfoUser from './InfoUser.vue';
+
 const rightDrawerOpen = ref(false)
 const userGoogle = inject('userGoogle')
 
@@ -31,6 +32,6 @@ const logoutGoogle = () => {
   </q-header>
 
   <q-drawer v-model="rightDrawerOpen" side="right" behavior="mobile" bordered v-if="userGoogle">
-    <!-- drawer content -->
+    <info-user />
   </q-drawer>
 </template>
