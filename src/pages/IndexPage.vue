@@ -1,5 +1,5 @@
 <script setup>
-  import { inject } from 'vue';
+  import { inject, nextTick, watchEffect } from 'vue';
   import {collection, query, onSnapshot, orderBy} from 'firebase/firestore'
   import { auth, db } from '../firebase';
   import { ref } from 'vue';
@@ -8,19 +8,26 @@
   const messages = ref([])
 
   const chatRef = ref(null)
-  const q = query(collection(db, 'chats'), orderBy('time'))
-  const unsubscribe = onSnapshot(q, async(snapshot) => {
-    snapshot.docChanges().forEach((change) => {
-      if (change.type === 'added') {
-        messages.value.push({
-          id: change.doc.id,
-          ...change.doc.data()
-        })
-      }
-    });
-    await nextTick()
-    chatRef.value.scrollTo(0, chatRef.value.scrollHeight)
+  watchEffect((onCleanup) => {
+    if(userGoogle.value){
+      const q = query(collection(db, 'chats'), orderBy('time'))
+      const unsubscribe = onSnapshot(q, async(snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === 'added') {
+            messages.value.push({
+              id: change.doc.id,
+              ...change.doc.data()
+            })
+          }
+        });
+        await nextTick()
+        console.log(chatRef.value.scrollHeight)
+        chatRef.value.scrollTo(0, chatRef.value.scrollHeight)
+      })
+      onCleanup(unsubscribe)
+    }
   })
+
 </script>
 <template>
   <q-page v-if="!userGoogle">
@@ -46,7 +53,7 @@
 
 <style>
 .scrollChat{
-  height: calc(100vh - 100px);
+  height: calc(100vh - 150px);
   overflow-y: scroll;
 }
 </style>
