@@ -5,6 +5,10 @@ import { db, auth } from '../firebase';
 
 const text = ref('')
 const addText=()=>{
+  if(!text.value.trim()){
+    text.value = ''
+    return console.log('No se puede enviar un mensaje vacio')
+  }
   addDoc(collection(db, 'chats'),{
     text: text.value,
     uid: auth.currentUser.uid,
