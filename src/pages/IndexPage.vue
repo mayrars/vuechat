@@ -1,6 +1,6 @@
 <script setup>
   import { inject, nextTick, watchEffect } from 'vue';
-  import {collection, query, onSnapshot, orderBy} from 'firebase/firestore'
+  import {collection, query, onSnapshot, orderBy, limit} from 'firebase/firestore'
   import { auth, db } from '../firebase';
   import { ref } from 'vue';
 
@@ -8,9 +8,11 @@
   const messages = ref([])
 
   const chatRef = ref(null)
+
+  let inicio = 0
   watchEffect((onCleanup) => {
     if(userGoogle.value){
-      const q = query(collection(db, 'chats'), orderBy('time'))
+      const q = query(collection(db, 'chats'), orderBy('time','desc'),limit(10))
       const unsubscribe = onSnapshot(q, async(snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === 'added') {
@@ -20,6 +22,11 @@
             })
           }
         });
+
+        if(inicio===0){
+          messages.value = messages.value.reverse()
+          inicio = 1
+        }
         await nextTick()
         console.log(chatRef.value.scrollHeight)
         chatRef.value.scrollTo(0, chatRef.value.scrollHeight)
